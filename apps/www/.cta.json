@@ -1,28 +1,16 @@
 {
-  "projectName": "www",
+  "projectName": "start-app",
   "mode": "file-router",
   "typescript": true,
   "tailwind": true,
   "packageManager": "pnpm",
-  "addOnOptions": {
-    "drizzle": {
-      "database": "postgresql"
-    }
-  },
+  "addOnOptions": {},
   "git": true,
   "version": 1,
   "framework": "react-cra",
   "chosenAddOns": [
     "eslint",
-    "cloudflare",
-    "start",
-    "drizzle",
-    "oRPC",
-    "tanstack-query",
-    "t3env",
-    "shadcn",
-    "compiler",
-    "form",
-    "table"
+    "nitro",
+    "start"
   ]
 }
