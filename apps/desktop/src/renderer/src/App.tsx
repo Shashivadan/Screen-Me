@@ -1,12 +1,11 @@
-
+import { Button } from '@repo/ui/components/button'
 
 function App(): React.JSX.Element {
-
   return (
     <>
-    <div>
-      hello world shree
-    </div>
+      <div className="">
+        hello world shree <Button>hellow</Button>
+      </div>
     </>
   )
 }
