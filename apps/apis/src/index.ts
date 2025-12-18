@@ -1,8 +1,13 @@
-import { createServer } from "node:http";
-import { RPCHandler } from "@orpc/server/node";
+import { RPCHandler } from "@orpc/server/fetch";
 import { CORSPlugin } from "@orpc/server/plugins";
 import { onError } from "@orpc/server";
-import { router } from "./router/index.js";
+import { router } from "./router/index";
+import { Hono } from "hono";
+import { createContext } from "./orpc/context";
+import consola from "./utils/console";
+import { nodeEnv } from "./utils/env";
+
+const app = new Hono();
 
 const handler = new RPCHandler(router, {
   plugins: [new CORSPlugin()],
@@ -13,17 +18,25 @@ const handler = new RPCHandler(router, {
   ],
 });
 
-const server = createServer(async (req, res) => {
-  const result = await handler.handle(req, res, {
-    context: { headers: req.headers },
+app.use("/rpc/*", async (c, next) => {
+  const { matched, response } = await handler.handle(c.req.raw, {
+    prefix: "/rpc",
+    context: createContext(c),
   });
 
-  if (!result.matched) {
-    res.statusCode = 404;
-    res.end("No procedure matched");
+  if (matched) {
+    return c.newResponse(response.body, response);
   }
+
+  await next();
 });
 
-server.listen(3000, "127.0.0.1", () =>
-  console.log("Listening on 127.0.0.1:3000")
-);
+
+export default {
+  fetch: app.fetch,
+  port: process.env.PORT
+    ? Number(process.env.PORT)
+    : nodeEnv === "test"
+      ? 3000
+      : 3000,
+};

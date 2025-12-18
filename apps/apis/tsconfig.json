@@ -1,12 +1,15 @@
 {
   "extends": "@repo/typescript-config/tsconfig.base.json",
   "compilerOptions": {
+    "declaration": true,
+    "skipLibCheck": true,
     "composite": true,
     "outDir": "build",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
-    // "jsx": "react-jsx"
+    "emitDeclarationOnly": true,
+    "jsx": "react-jsx"
   }
 }
